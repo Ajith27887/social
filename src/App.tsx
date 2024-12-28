@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
+import React from "react";
 import "./App.css";
 import Signup from "./Components/Signup";
+import AuthProvider from "./Context/AuthContext";
 
 function App() {
   return (
     <div className="App">
-      <Signup />
+      <AuthProvider>
+        <Signup />
+      </AuthProvider>
     </div>
   );
 }

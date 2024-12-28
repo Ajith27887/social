@@ -1,10 +1,28 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Card, Form, Col } from "react-bootstrap";
+import { useAuth } from "../Context/AuthContext";
+import { Alert } from "bootstrap";
 
 export default function Signup() {
   const emailref = useRef();
-  const password = useRef();
+  const passwordRef = useRef();
   const passwordConfirm = useRef();
+  const { signUp } = useAuth();
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (passwordRef.current.value !== passwordConfirm.current.value) {
+      return setError("Password is mismatch");
+    }
+    try {
+      signUp(emailref.current.value, passwordRef.current.value);
+    } catch {
+      setError("somthing");
+    }
+    console.log(emailref.current.value, "email");
+  };
 
   return (
     <Card
@@ -17,7 +35,8 @@ export default function Signup() {
     >
       <Card.Body>
         <Card.Title>Sign Up</Card.Title>
-        <Form>
+        {error && <Alert>{error}</Alert>}
+        <Form onSubmit={handleSubmit}>
           <Form.Group as={Col} controlId="validationCustom01">
             <Form.Control
               ref={emailref}
@@ -28,7 +47,7 @@ export default function Signup() {
           </Form.Group>
           <Form.Group
             as={Col}
-            ref={password}
+            ref={passwordRef}
             className="mt-3"
             controlId="validationCustom01"
           >
@@ -40,7 +59,7 @@ export default function Signup() {
             ref={passwordConfirm}
             controlId="validationCustom01"
           >
-            <Form.Control required type="text" placeholder="Password Confirm" />
+            <Form.Control required type="text" placeholder="Confirm Password" />
           </Form.Group>
           <Button className="mt-3 w-100" type="submit">
             Sign Up
