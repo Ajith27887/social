@@ -3,7 +3,9 @@ import { auth } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -13,7 +15,8 @@ export function useAuth() {
 
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    navigate = useNavigate();
   console.log("Auth instance:", auth);
 
   function signUp(email, password) {
@@ -54,8 +57,6 @@ function AuthProvider({ children }) {
     const unSubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
     });
-
-    return unSubscribe;
   }, []);
 
   const value = {

@@ -15,9 +15,10 @@ export default function Login() {
 
     try {
       setError("");
-      login(emailref.current.value, passwordRef.current.value);
-      if (!error) {
+      await login(emailref.current.value, passwordRef.current.value);
+      if (currentUser) {
         navigate("/");
+        console.log(currentUser, "crr");
       }
     } catch (error) {
       setError("Account doesn't Exists");
