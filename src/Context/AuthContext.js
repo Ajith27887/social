@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -9,16 +12,42 @@ export function useAuth() {
 }
 
 function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(),
+    [error, setError] = useState("");
   console.log("Auth instance:", auth);
 
-  async function signUp(email, Password) {
-    try {
-      await createUserWithEmailAndPassword(auth, email, Password);
-      console.log("User signed up:", email);
-    } catch (error) {
-      console.error("Error signing up:", error.message);
+  function signUp(email, password) {
+    if (!email || !password) {
+      console.error("Email or password is missing");
+      return;
     }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user, "user");
+        return user;
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // throw new Error(errorMessage);
+      });
+  }
+
+  function login(email, password) {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user, "user");
+        return user;
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage, "errorcode");
+        // throw new Error(errorMessage); // Pass the error up the chain
+        setError("Account doesn't Exists");
+      });
   }
 
   useEffect(() => {
@@ -31,7 +60,10 @@ function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    login,
+    error,
     signUp,
+    setError,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

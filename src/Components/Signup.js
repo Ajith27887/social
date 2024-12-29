@@ -1,71 +1,82 @@
 import React, { useRef, useState } from "react";
-import { Button, Card, Form, Col } from "react-bootstrap";
+import { Button, Card, Form, Col, Alert } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
-import { Alert } from "bootstrap";
+import { Link } from "react-router-dom";
 
 export default function Signup() {
   const emailref = useRef();
   const passwordRef = useRef();
   const passwordConfirm = useRef();
-  const { signUp } = useAuth();
+  const { signUp, currentUser } = useAuth();
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirm.current.value) {
       return setError("Password is mismatch");
     }
+
     try {
-      signUp(emailref.current.value, passwordRef.current.value);
+      setError("");
+      await signUp(emailref.current.value, passwordRef.current.value);
+      console.log(passwordRef.current.value);
     } catch {
-      setError("somthing");
+      setError("somthing went wrong");
     }
     console.log(emailref.current.value, "email");
   };
 
   return (
-    <Card
-      style={{
-        width: "18rem",
-        boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
-        borderRadius: "8px",
-        border: "none",
-      }}
-    >
-      <Card.Body>
-        <Card.Title>Sign Up</Card.Title>
-        {error && <Alert>{error}</Alert>}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group as={Col} controlId="validationCustom01">
-            <Form.Control
-              ref={emailref}
-              required
-              type="text"
-              placeholder="Email"
-            />
-          </Form.Group>
-          <Form.Group
-            as={Col}
-            ref={passwordRef}
-            className="mt-3"
-            controlId="validationCustom01"
-          >
-            <Form.Control required type="text" placeholder="Password" />
-          </Form.Group>
-          <Form.Group
-            as={Col}
-            className="mt-3"
-            ref={passwordConfirm}
-            controlId="validationCustom01"
-          >
-            <Form.Control required type="text" placeholder="Confirm Password" />
-          </Form.Group>
-          <Button className="mt-3 w-100" type="submit">
-            Sign Up
-          </Button>
-        </Form>
-      </Card.Body>
-    </Card>
+    <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
+      <Card
+        style={{
+          width: "18rem",
+          boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
+          borderRadius: "8px",
+          border: "none",
+        }}
+      >
+        <Card.Body>
+          <Card.Title>Sign Up</Card.Title>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group as={Col} controlId="validationCustom01">
+              <Form.Control
+                ref={emailref}
+                required
+                type="text"
+                placeholder="Email"
+              />
+            </Form.Group>
+            <Form.Group as={Col} type="password" className="mt-3">
+              <Form.Control
+                ref={passwordRef}
+                required
+                type="text"
+                placeholder="Password"
+              />
+            </Form.Group>
+            <Form.Group as={Col} type="password" className="mt-3">
+              <Form.Control
+                required
+                ref={passwordConfirm}
+                type="text"
+                placeholder="Confirm Password"
+              />
+            </Form.Group>
+            <Button className="mt-3 w-100" type="submit">
+              Sign Up
+            </Button>
+          </Form>
+          <div className="text-center my-3 w-100">
+            Have an account?{" "}
+            <Link className="text-decoration-none text-secondary" to="/Login">
+              Log In
+            </Link>
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
   );
 }
