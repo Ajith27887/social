@@ -3,8 +3,8 @@ import { auth } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -14,10 +14,11 @@ export function useAuth() {
 
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [success, setSuccess] = useState("");
   console.log("Auth instance:", auth);
 
-  function signUp(email, password) {
+  function signUp(email, password, displayName) {
     if (!email || !password) {
       console.error("Email or password is missing");
       return;
@@ -25,13 +26,15 @@ function AuthProvider({ children }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user, "user");
-        return user;
+        return updateProfile(user, { displayName }).then(() => {
+          console.log("User profile updated:", user);
+          return user;
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // throw new Error(errorMessage);
+        throw error;
       });
   }
 
@@ -46,14 +49,17 @@ function AuthProvider({ children }) {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage, "errorcode");
-        // throw new Error(errorMessage); // Pass the error up the chain
         setError("Account doesn't Exists");
+        throw error;
       });
   }
 
   useEffect(() => {
     const unSubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
+      if (user) {
+        console.log("Current user:", user.email, user.displayName);
+      }
     });
   }, []);
 
@@ -63,6 +69,8 @@ function AuthProvider({ children }) {
     error,
     signUp,
     setError,
+    setSuccess,
+    success,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,16 +1,21 @@
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import { getAuth, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import { useState } from "react";
+import { VscAccount } from "react-icons/vsc";
+import Card from "react-bootstrap/Card";
+import { useAuth } from "../Context/AuthContext";
+import { auth } from "../firebase";
+import "./Navbar.scss";
 
 function NavScrollExample() {
   const navigate = useNavigate(),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    { currentUser } = useAuth(),
+    imageUrl = currentUser && currentUser.photoURL;
 
   const handleLogOut = () => {
     const auth = getAuth();
@@ -22,41 +27,61 @@ function NavScrollExample() {
         setError("Somthig wrong");
       });
   };
+
+  console.log(auth, "name");
+
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: "100px" }}
-            navbarScroll
-          >
-            <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Link</Nav.Link>
-            <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#" disabled>
-              Link
-            </Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Button variant="outline-success" onClick={handleLogOut}>
-              Log Out
-            </Button>
-          </Form>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <>
+      <Navbar expand="lg" className="bg-body-tertiary">
+        <Container>
+          {/* <Navbar.Brand href="#">Navbar scroll</Navbar.Brand> */}
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="navbarScroll">
+            <Nav
+              className="me-auto my-2 my-lg-0"
+              style={{ maxHeight: "100px" }}
+              navbarScroll
+            >
+              <Nav.Link href="/news-feed">News Feeds</Nav.Link>
+              <Nav.Link href="/post">Post</Nav.Link>
+            </Nav>
+            <Nav>
+              <div className="profile-container">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt="Profile"
+                    className="mx-3 profile-icon"
+                  />
+                ) : (
+                  <div className="">
+                    <VscAccount
+                      className="mx-3 profile-icon"
+                      style={{ fontSize: "2rem" }}
+                    />
+                    {currentUser && currentUser.displayName}
+                  </div>
+                )}
+                <Card className="profile-card">
+                  <Card.Body>
+                    <Card.Title>
+                      {currentUser && currentUser.displayName}
+                    </Card.Title>
+                    <Card.Subtitle className="mb-2 text-left">
+                      <b>Email :</b> {currentUser && currentUser.email}
+                    </Card.Subtitle>
+                    <Button variant="outline-danger" onClick={handleLogOut}>
+                      Log Out
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </div>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Outlet />
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Button, Card, Form, Col, Alert } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,8 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Login() {
   const emailref = useRef();
   const passwordRef = useRef();
-  const { login, currentUser, error, setError } = useAuth();
-  // const [error, setError] = useState("");
+  const { login, currentUser, error, setError, setSuccess, success } =
+    useAuth();
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
