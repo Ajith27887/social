@@ -30,6 +30,14 @@ function NavScrollExample() {
 
   console.log(auth, "name");
 
+  const handleNavigation = (path) => {
+    if (currentUser) {
+      navigate(path);
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -43,7 +51,9 @@ function NavScrollExample() {
               navbarScroll
             >
               <Nav.Link href="/news-feed">News Feeds</Nav.Link>
-              <Nav.Link href="/post">Post</Nav.Link>
+              <Nav.Link onClick={() => handleNavigation("/post")}>
+                Post
+              </Nav.Link>
             </Nav>
             <Nav>
               <div className="profile-container">

@@ -8,6 +8,7 @@ import Login from "./Components/Login";
 import { Navbar } from "react-bootstrap";
 import NewsFeed from "./Components/NewsFeed";
 import PostPage from "./Components/PostPage";
+import ProtectedRoute from "./Components/ProtectedRoute.tsx";
 
 function App() {
   return (
@@ -15,13 +16,41 @@ function App() {
       <Router>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<Navbar />}>
-              <Route path="/news-feed" element={<NewsFeed />} />
-              <Route path="/post" element={<PostPage />} />
-            </Route>
-            <Route path="/" element={<DashBoard />} />
-            <Route path="/Signup" element={<Signup />} />
-            <Route path="/Login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Navbar />
+                    <DashBoard />
+                  </>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/news-feed"
+              element={
+                // <ProtectedRoute>
+                <>
+                  <Navbar />
+                  <NewsFeed />
+                </>
+                // </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/post"
+              element={
+                <ProtectedRoute>
+                  <>
+                    <Navbar />
+                    <PostPage />
+                  </>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </AuthProvider>
       </Router>
