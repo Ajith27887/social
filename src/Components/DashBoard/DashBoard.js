@@ -1,11 +1,12 @@
 import React from "react";
 import ImageUploader from "../ImageUploader/ImageUploader";
+import { Container } from "react-bootstrap";
 
 function DashBoard() {
   return (
-    <div>
+    <Container>
       <ImageUploader />
-    </div>
+    </Container>
   );
 }
 

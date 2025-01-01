@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import uploadImage from "../ImageUploader/uploadImage";
+import "../ImageUploader/ImageUpload.scss";
+import { CiImageOn } from "react-icons/ci";
+import FetchAllImages from "./FetchAllImages";
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState([]);
+
+  useEffect(() => {
+    const loadImages = async () => {
+      const urls = await FetchAllImages();
+      setImageUrl(urls);
+      console.log(urls, "url");
+    };
+    loadImages();
+  }, []);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -12,33 +24,49 @@ const ImageUploader = () => {
   const handleUpload = async () => {
     if (!file) {
       alert("Please select a file!");
-
       return;
     }
-
     const url = await uploadImage(file);
-    console.log("url-not", url);
     if (url) {
-      console.log(url, "url");
-
-      setImageUrl(url);
-      alert("Image uploaded successfully!");
+      setImageUrl((prevUrls) => [...prevUrls, url]);
     }
   };
 
-  return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+  const findfile = () => {
+    document.getElementById("filechange").click();
+  };
 
-      {imageUrl && (
+  return (
+    <div className="imageupload p-5 mt-5">
+      <CiImageOn
+        onClick={findfile}
+        style={{ cursor: "pointer", fontSize: "2rem" }}
+      />
+      <input
+        id="filechange"
+        style={{ display: "none" }}
+        type="file"
+        onChange={handleFileChange}
+      />
+      <div>
+        {file && (
+          <button className="mt-3" onClick={handleUpload}>
+            Upload
+          </button>
+        )}
+      </div>
+
+      {imageUrl.length > 0 && (
         <div>
-          <p>Image URL:</p>
-          <img
-            src={imageUrl}
-            alt="Uploaded"
-            style={{ width: "300px", marginTop: "10px" }}
-          />
+          <p>Uploaded Images:</p>
+          {imageUrl.map((url, index) => (
+            <img
+              key={index}
+              src={url}
+              alt={`Uploaded ${index}`}
+              style={{ width: "300px", marginTop: "10px" }}
+            />
+          ))}
         </div>
       )}
     </div>

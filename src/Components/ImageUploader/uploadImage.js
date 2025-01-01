@@ -11,6 +11,9 @@ const uploadImage = async (file) => {
       contentType: file.type,
     });
 
+  console.log(fileName, "fileName");
+  console.log("Upload successful:", data);
+
   if (error) {
     console.error("Error uploading image:", error);
     return null;
@@ -29,7 +32,7 @@ const uploadImage = async (file) => {
 
   // Insert the image data into the images table
   const { data: insertData, error: insertError } = await supabase
-    .from("images")
+    .from(bucketName)
     .insert([{ file_name: fileName, public_url: publicURL }]);
 
   if (insertError) {
