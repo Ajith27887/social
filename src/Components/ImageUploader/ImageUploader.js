@@ -10,6 +10,7 @@ const ImageUploader = () => {
   const [imageUrl, setImageUrl] = useState([]);
   const { currentUser } = useAuth();
   const userId = currentUser ? currentUser.uid : "";
+  const userEmail = currentUser ? currentUser.email : "";
   console.log("uid", userId);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const ImageUploader = () => {
       alert("Please select a file!");
       return;
     }
-    const url = await uploadImage(file, userId);
+    const url = await uploadImage(file, userId, userEmail);
     if (url) {
       setImageUrl((prevUrls) => [...prevUrls, url]);
     }

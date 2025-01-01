@@ -6,10 +6,9 @@ import "../Suggestion/Suggestion.scss";
 import { useAuth } from "../../Context/AuthContext";
 
 function Suggestion() {
-  const { cureentUser } = useAuth();
+  const { cureentUser, setFollowUser, followUser } = useAuth();
   const [users, setUsers] = useState([]);
   const userEmail = cureentUser && cureentUser.email;
-  const [followUser, setFollowUser] = useState("");
 
   useEffect(() => {
     const loadUsers = async () => {

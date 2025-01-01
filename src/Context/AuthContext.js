@@ -20,6 +20,8 @@ function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(),
     [error, setError] = useState(""),
     [success, setSuccess] = useState("");
+  const [followUser, setFollowUser] = useState("");
+
   console.log("Auth instance:", auth);
 
   async function signUp(email, password, displayName) {
@@ -37,12 +39,12 @@ function AuthProvider({ children }) {
       await updateProfile(user, { displayName });
       console.log("User profile updated:", user);
 
-      // // Store user data in Firestore
-      // await setDoc(doc(db, "customersData", user.uid), {
-      //   uid: user.uid,
-      //   email: user.email,
-      //   displayName: user.displayName,
-      // });
+      // Store user data in Firestore
+      await setDoc(doc(db, "customersData", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+      });
 
       return user;
     } catch (error) {
@@ -64,11 +66,11 @@ function AuthProvider({ children }) {
       console.log(user, "user");
 
       // // Store user data in Firestore
-      await setDoc(doc(db, "customersData", user.uid), {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-      });
+      // await setDoc(doc(db, "customersData", user.uid), {
+      //   uid: user.uid,
+      //   email: user.email,
+      //   displayName: user.displayName,
+      // });
       return user;
     } catch (error) {
       const errorCode = error.code;
@@ -95,6 +97,8 @@ function AuthProvider({ children }) {
     signUp,
     setError,
     setSuccess,
+    setFollowUser,
+    followUser,
     success,
   };
 

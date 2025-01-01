@@ -1,6 +1,6 @@
 import { supabase } from "../Supabase/Supabase";
 
-const uploadImage = async (file, userId) => {
+const uploadImage = async (file, userId, userEmail) => {
   const fileName = `${Date.now()}-${file.name}`; // Generate a unique filename
   const bucketName = "social-media-image";
 
@@ -34,7 +34,14 @@ const uploadImage = async (file, userId) => {
   // Insert the image data into the images table
   const { data: insertData, error: insertError } = await supabase
     .from("images")
-    .insert([{ user_id: userId, file_name: fileName, public_url: publicURL }]);
+    .insert([
+      {
+        user_email: userEmail,
+        user_id: userId,
+        file_name: fileName,
+        public_url: publicURL,
+      },
+    ]);
 
   if (insertError) {
     console.error("Error inserting image data:", insertError);

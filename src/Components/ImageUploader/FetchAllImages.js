@@ -1,8 +1,6 @@
 import { supabase } from "../Supabase/Supabase";
 
 async function FetchAllImages(userId) {
-  const bucketName = "social-media-image";
-
   const { data: files, error } = await supabase
     .from("images")
     .select("public_url")

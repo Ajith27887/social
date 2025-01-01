@@ -52,6 +52,9 @@ function NavBar() {
               <Nav.Link onClick={() => handleNavigation("/Suggestion")}>
                 Suggestion
               </Nav.Link>
+              <Nav.Link onClick={() => handleNavigation("/post")}>
+                Post
+              </Nav.Link>
             </Nav>
             <Nav>
               <div className="profile-container">
