@@ -1,6 +1,6 @@
 import { supabase } from "../Supabase/Supabase";
 
-const uploadImage = async (file) => {
+const uploadImage = async (file, userId) => {
   const fileName = `${Date.now()}-${file.name}`; // Generate a unique filename
   const bucketName = "social-media-image";
 
@@ -11,8 +11,7 @@ const uploadImage = async (file) => {
       contentType: file.type,
     });
 
-  console.log(fileName, "fileName");
-  console.log("Upload successful:", data);
+  console.log(data, "fileName");
 
   if (error) {
     console.error("Error uploading image:", error);
@@ -28,19 +27,20 @@ const uploadImage = async (file) => {
     console.error("Error getting public URL:", urlError);
     return null;
   }
+  console.log(fileName, "pub");
+
   const publicURL = publicURLData.publicUrl;
 
   // Insert the image data into the images table
   const { data: insertData, error: insertError } = await supabase
-    .from(bucketName)
-    .insert([{ file_name: fileName, public_url: publicURL }]);
+    .from("images")
+    .insert([{ user_id: userId, file_name: fileName, public_url: publicURL }]);
 
   if (insertError) {
     console.error("Error inserting image data:", insertError);
     return null;
   }
 
-  console.log("Image data inserted:", insertData);
   return publicURL;
 };
 

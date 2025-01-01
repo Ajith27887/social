@@ -3,14 +3,18 @@ import uploadImage from "../ImageUploader/uploadImage";
 import "../ImageUploader/ImageUpload.scss";
 import { CiImageOn } from "react-icons/ci";
 import FetchAllImages from "./FetchAllImages";
+import { useAuth } from "../../Context/AuthContext";
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState([]);
+  const { currentUser } = useAuth();
+  const userId = currentUser.uid;
+  console.log("uid", userId);
 
   useEffect(() => {
     const loadImages = async () => {
-      const urls = await FetchAllImages();
+      const urls = await FetchAllImages(userId);
       setImageUrl(urls);
       console.log(urls, "url");
     };
@@ -26,7 +30,7 @@ const ImageUploader = () => {
       alert("Please select a file!");
       return;
     }
-    const url = await uploadImage(file);
+    const url = await uploadImage(file, userId);
     if (url) {
       setImageUrl((prevUrls) => [...prevUrls, url]);
     }

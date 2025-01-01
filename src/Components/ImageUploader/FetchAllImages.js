@@ -1,11 +1,14 @@
 import { supabase } from "../Supabase/Supabase";
 
-async function FetchAllImages() {
+async function FetchAllImages(userId) {
   const bucketName = "social-media-image";
 
-  const { data: files, error } = await supabase.storage
-    .from(bucketName)
-    .list("");
+  const { data: files, error } = await supabase
+    .from("images")
+    .select("public_url")
+    .eq("user_id", userId);
+
+  console.log(JSON.stringify(files, null, 2, "files"));
 
   if (error) {
     console.error("Error listing files:", error);
@@ -20,15 +23,9 @@ async function FetchAllImages() {
   console.log("Files found:", files);
 
   // Get the public URLs of all files
-  const imageUrls = files.map((file) => {
-    const { publicUrl } = supabase.storage
-      .from(bucketName)
-      .getPublicUrl(file.name);
-    console.log("Public URL for file:", file.name, publicUrl);
-    return publicUrl;
-  });
+  const imageUrls = files.map((file) => file.public_url);
 
-  console.log("Image URLs:", imageUrls);
+  console.log("Image URLs:", files);
   return imageUrls;
 }
 
