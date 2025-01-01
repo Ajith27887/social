@@ -8,9 +8,7 @@ import { useState } from "react";
 import { VscAccount } from "react-icons/vsc";
 import Card from "react-bootstrap/Card";
 import { useAuth } from "../../Context/AuthContext";
-import { auth } from "../../firebase";
 import "./Navbar.scss";
-import Suggestion from "../Suggestion/Suggestion";
 
 function NavBar() {
   const navigate = useNavigate(),
@@ -28,8 +26,6 @@ function NavBar() {
         setError("Somthig wrong");
       });
   };
-
-  console.log(auth, "name");
 
   const handleNavigation = (path) => {
     if (currentUser) {

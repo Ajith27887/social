@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
+
+// import { fetchAllUsers } from "../Components/Suggestion/FetchFriends";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -13,45 +16,67 @@ export function useAuth() {
 }
 
 function AuthProvider({ children }) {
+  // fetchAllUsers();
   const [currentUser, setCurrentUser] = useState(),
     [error, setError] = useState(""),
     [success, setSuccess] = useState("");
   console.log("Auth instance:", auth);
 
-  function signUp(email, password, displayName) {
+  async function signUp(email, password, displayName) {
     if (!email || !password) {
       console.error("Email or password is missing");
       return;
     }
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        return updateProfile(user, { displayName }).then(() => {
-          console.log("User profile updated:", user);
-          return user;
-        });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        throw error;
-      });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      await updateProfile(user, { displayName });
+      console.log("User profile updated:", user);
+
+      // // Store user data in Firestore
+      // await setDoc(doc(db, "customersData", user.uid), {
+      //   uid: user.uid,
+      //   email: user.email,
+      //   displayName: user.displayName,
+      // });
+
+      return user;
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error(errorCode, errorMessage);
+      throw error;
+    }
   }
 
-  function login(email, password) {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user, "user");
-        return user;
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage, "errorcode");
-        setError("Account doesn't Exists");
-        throw error;
+  async function login(email, password) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      console.log(user, "user");
+
+      // // Store user data in Firestore
+      await setDoc(doc(db, "customersData", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
       });
+      return user;
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage, "errorcode");
+      setError("Account doesn't exist");
+      throw error;
+    }
   }
 
   useEffect(() => {

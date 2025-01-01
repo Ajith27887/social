@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { collection, getDocs } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,5 +24,27 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+
+export const fetchAllUsers = async () => {
+  try {
+    // Reference the 'users' collection
+    const usersCollection = collection(db, "customersData");
+
+    // Fetch all documents in the collection
+    const querySnapshot = await getDocs(usersCollection);
+
+    // Map the documents to extract user data
+    const usersList = querySnapshot.docs.map((doc) => ({
+      id: doc.id, // Document ID (optional, in case you need it)
+      ...doc.data(), // Spread the data fields (name, email, etc.)
+    }));
+
+    console.log(usersList); // Logs all users
+    return usersList;
+  } catch (error) {
+    console.error("Error fetching users: ", error);
+    return [];
+  }
+};
 
 export { db, auth, provider };
