@@ -10,6 +10,7 @@ import Card from "react-bootstrap/Card";
 import { useAuth } from "../../Context/AuthContext";
 import { auth } from "../../firebase";
 import "./Navbar.scss";
+import Suggestion from "../Suggestion/Suggestion";
 
 function NavBar() {
   const navigate = useNavigate(),
@@ -52,8 +53,8 @@ function NavBar() {
               <Nav.Link onClick={() => handleNavigation("/")}>
                 News Feeds
               </Nav.Link>
-              <Nav.Link onClick={() => handleNavigation("/post")}>
-                Post
+              <Nav.Link onClick={() => handleNavigation("/Suggestion")}>
+                Suggestion
               </Nav.Link>
             </Nav>
             <Nav>

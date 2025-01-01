@@ -9,7 +9,7 @@ const ImageUploader = () => {
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState([]);
   const { currentUser } = useAuth();
-  const userId = currentUser.uid;
+  const userId = currentUser ? currentUser.uid : "";
   console.log("uid", userId);
 
   useEffect(() => {
