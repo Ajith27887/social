@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "@supabase/supabase-js": "^2.47.10",
+    "apollo-server": "^3.13.0",
+    "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "cra-template-typescript": "1.2.0",
     "firebase": "^11.1.0",
+    "graphql": "^16.10.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.7",
     "react-dom": "^19.0.0",

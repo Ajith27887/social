@@ -4,23 +4,29 @@ import { SlUserFollow } from "react-icons/sl";
 import { Badge, Button, Container } from "react-bootstrap";
 import "../Suggestion/Suggestion.scss";
 import { useAuth } from "../../Context/AuthContext";
+import { RiUserUnfollowFill } from "react-icons/ri";
 
 function Suggestion() {
-  const { cureentUser, setFollowUser, followUser } = useAuth();
+  const { currentUser, setFollowUser, followUser } = useAuth();
   const [users, setUsers] = useState([]);
-  const userEmail = cureentUser && cureentUser.email;
+  const userEmail = currentUser && currentUser.email;
+  const [Status, setStatus] = useState(false);
 
   useEffect(() => {
     const loadUsers = async () => {
       const usersList = await fetchAllUsers();
-      setUsers(usersList);
+      const filteredUsers = usersList.filter(
+        (data) => data.email !== userEmail
+      );
+      setUsers(filteredUsers);
+      console.log("all", filteredUsers);
     };
     loadUsers();
-    console.log("all", users);
-  }, [userEmail]);
+  }, [currentUser]);
 
-  const follow = () => {
-    alert(followUser);
+  const follow = (email, status) => {
+    setFollowUser(email);
+    setStatus(status);
   };
 
   return (
@@ -40,10 +46,10 @@ function Suggestion() {
                 </Badge>
                 <Button
                   bg="success"
-                  onClick={() => follow(setFollowUser(user.email))}
+                  onClick={() => follow(user.email, "true")}
                   className="mx-2"
                 >
-                  <SlUserFollow />
+                  {Status ? <RiUserUnfollowFill /> : <SlUserFollow />}
                 </Button>
               </div>
             </li>
