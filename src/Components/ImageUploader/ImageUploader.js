@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import uploadImage from "./uploadImage";
+import uploadImage from "../ImageUploader/uploadImage";
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
@@ -34,9 +34,6 @@ const ImageUploader = () => {
       {imageUrl && (
         <div>
           <p>Image URL:</p>
-          <a href={imageUrl} target="_blank" rel="noopener noreferrer">
-            {imageUrl}
-          </a>
           <img
             src={imageUrl}
             alt="Uploaded"

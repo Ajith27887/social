@@ -7,11 +7,11 @@ import { useNavigate, Outlet } from "react-router-dom";
 import { useState } from "react";
 import { VscAccount } from "react-icons/vsc";
 import Card from "react-bootstrap/Card";
-import { useAuth } from "../Context/AuthContext";
-import { auth } from "../firebase";
+import { useAuth } from "../../Context/AuthContext";
+import { auth } from "../../firebase";
 import "./Navbar.scss";
 
-function NavScrollExample() {
+function NavBar() {
   const navigate = useNavigate(),
     [error, setError] = useState(""),
     { currentUser } = useAuth(),
@@ -42,7 +42,6 @@ function NavScrollExample() {
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          {/* <Navbar.Brand href="#">Navbar scroll</Navbar.Brand> */}
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
@@ -50,7 +49,9 @@ function NavScrollExample() {
               style={{ maxHeight: "100px" }}
               navbarScroll
             >
-              <Nav.Link href="/news-feed">News Feeds</Nav.Link>
+              <Nav.Link onClick={() => handleNavigation("/")}>
+                News Feeds
+              </Nav.Link>
               <Nav.Link onClick={() => handleNavigation("/post")}>
                 Post
               </Nav.Link>
@@ -95,4 +96,4 @@ function NavScrollExample() {
   );
 }
 
-export default NavScrollExample;
+export default NavBar;
