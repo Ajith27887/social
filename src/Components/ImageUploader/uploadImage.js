@@ -1,6 +1,6 @@
 import { supabase } from "../Supabase/Supabase";
 
-const uploadImage = async (file, userId, userEmail) => {
+const uploadImage = async (file, userId, userEmail, userName) => {
   const fileName = `${Date.now()}-${file.name}`; // Generate a unique filename
   const bucketName = "social-media-image";
 
@@ -38,6 +38,7 @@ const uploadImage = async (file, userId, userEmail) => {
       {
         user_email: userEmail,
         user_id: userId,
+        user_name: userName,
         file_name: fileName,
         public_url: publicURL,
       },
@@ -48,7 +49,7 @@ const uploadImage = async (file, userId, userEmail) => {
     return null;
   }
 
-  return publicURL;
+  return { public_url: publicURL, created_at: new Date(), user_name: userName };
 };
 
 export default uploadImage;

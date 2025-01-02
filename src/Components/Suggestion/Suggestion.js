@@ -10,7 +10,7 @@ function Suggestion() {
   const { currentUser, setFollowUser, followUser } = useAuth();
   const [users, setUsers] = useState([]);
   const userEmail = currentUser && currentUser.email;
-  const [Status, setStatus] = useState(false);
+  const [status, setStatus] = useState({});
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -24,38 +24,43 @@ function Suggestion() {
     loadUsers();
   }, [currentUser]);
 
-  const follow = (email, status) => {
+  const follow = (email) => {
     setFollowUser(email);
-    setStatus(status);
+    setStatus((prevStatus) => ({
+      ...prevStatus,
+      [email]: !prevStatus[email],
+    }));
   };
 
   return (
-    <div>
-      <h2>Suggestions</h2>
-      <Container>
-        <ul>
+    <div className="container mx-auto p-5">
+      <h2 className="text-2xl font-semibold mb-5">Suggestions</h2>
+      <div className="bg-white rounded-lg shadow-lg p-5">
+        <ul className="space-y-4">
           {users.map((user) => (
             <li
               key={user.id}
-              className=" mt-3"
-              style={{ listStyleType: "none" }}
+              className="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm"
             >
-              <div className="users-list">
-                <Badge className="p-3 w-25" bg="success">
+              <div className="flex items-center space-x-4">
+                <div className="bg-green-500 text-white rounded-full p-3">
                   {user.name || user.displayName}
-                </Badge>
-                <Button
-                  bg="success"
-                  onClick={() => follow(user.email, "true")}
-                  className="mx-2"
-                >
-                  {Status ? <RiUserUnfollowFill /> : <SlUserFollow />}
-                </Button>
+                </div>
               </div>
+              <button
+                onClick={() => follow(user.email)}
+                className={`px-4 py-2 rounded ${
+                  status[user.email]
+                    ? "bg-red-500 text-white"
+                    : "bg-blue-500 text-white"
+                }`}
+              >
+                {status[user.email] ? <RiUserUnfollowFill /> : <SlUserFollow />}
+              </button>
             </li>
           ))}
         </ul>
-      </Container>
+      </div>
     </div>
   );
 }

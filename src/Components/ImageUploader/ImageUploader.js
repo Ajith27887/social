@@ -8,8 +8,10 @@ import { useAuth } from "../../Context/AuthContext";
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
   const { currentUser, setImageUrl } = useAuth();
+  const [isUploaded, setIsUploaded] = useState(false);
   const userId = currentUser ? currentUser.uid : "";
   const userEmail = currentUser ? currentUser.email : "";
+  const userName = currentUser ? currentUser.displayName : "";
   console.log("uid", userId);
 
   useEffect(() => {
@@ -19,10 +21,11 @@ const ImageUploader = () => {
       console.log(urls, "url");
     };
     loadImages();
-  }, []);
+  }, [userId, setImageUrl]);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    setIsUploaded(false); // Reset the upload state when a new file is selected
   };
 
   const handleUpload = async () => {
@@ -30,9 +33,10 @@ const ImageUploader = () => {
       alert("Please select a file!");
       return;
     }
-    const url = await uploadImage(file, userId, userEmail);
+    const url = await uploadImage(file, userId, userEmail, userName);
     if (url) {
       setImageUrl((prevUrls) => [...prevUrls, url]);
+      setIsUploaded(true); // Set the upload state to true after successful upload
     }
   };
 
@@ -41,11 +45,14 @@ const ImageUploader = () => {
   };
 
   return (
-    <div className="imageupload p-5 mt-5">
-      <CiImageOn
-        onClick={findfile}
-        style={{ cursor: "pointer", fontSize: "2rem" }}
-      />
+    <div className="imageupload p-5 mt-5 flex flex-col items-center">
+      <div className="flex flex-col items-center mb-4">
+        <CiImageOn
+          onClick={findfile}
+          style={{ cursor: "pointer", fontSize: "4rem", color: "#4A90E2" }}
+        />
+        <p className="text-gray-600 mt-2">Click the icon to Post an image</p>
+      </div>
       <input
         id="filechange"
         style={{ display: "none" }}
@@ -53,12 +60,18 @@ const ImageUploader = () => {
         onChange={handleFileChange}
       />
       <div>
-        {file && (
-          <button className="mt-3" onClick={handleUpload}>
+        {file && !isUploaded && (
+          <button
+            className="mt-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
+            onClick={handleUpload}
+          >
             Upload
           </button>
         )}
       </div>
+      {isUploaded && (
+        <p className="text-green-500 mt-3">Image uploaded successfully!</p>
+      )}
     </div>
   );
 };

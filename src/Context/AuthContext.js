@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
-
-// import { fetchAllUsers } from "../Components/Suggestion/FetchFriends";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 
 const AuthContext = createContext();
@@ -16,20 +16,13 @@ export function useAuth() {
 }
 
 function AuthProvider({ children }) {
-  // fetchAllUsers();
-  const [currentUser, setCurrentUser] = useState(),
-    [error, setError] = useState(""),
-    [imageUrl, setImageUrl] = useState([]),
-    [success, setSuccess] = useState("");
-  const [followUser, setFollowUser] = useState("");
-
-  console.log("Auth instance:", auth);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [imageUrl, setImageUrl] = useState([]);
+  const [followUser, setFollowUser] = useState([]);
 
   async function signUp(email, password, displayName) {
-    if (!email || !password) {
-      console.error("Email or password is missing");
-      return;
-    }
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -38,20 +31,15 @@ function AuthProvider({ children }) {
       );
       const user = userCredential.user;
       await updateProfile(user, { displayName });
-      console.log("User profile updated:", user);
-
-      // Store user data in Firestore
-      await setDoc(doc(db, "customersData", user.uid), {
+      await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName,
+        displayName: displayName,
       });
-
+      await signOut(auth); // Sign out the user immediately after signup
       return user;
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error(errorCode, errorMessage);
+      console.error("Error during signup:", error);
       throw error;
     }
   }
@@ -63,46 +51,32 @@ function AuthProvider({ children }) {
         email,
         password
       );
-      const user = userCredential.user;
-      console.log(user, "user");
-
-      // // Store user data in Firestore
-      // await setDoc(doc(db, "customersData", user.uid), {
-      //   uid: user.uid,
-      //   email: user.email,
-      //   displayName: user.displayName,
-      // });
-      return user;
+      setCurrentUser(userCredential.user);
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage, "errorcode");
-      setError("Account doesn't exist");
+      console.error("Error during login:", error);
       throw error;
     }
   }
 
   useEffect(() => {
-    const unSubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-      if (user) {
-        console.log("Current user:", user.email, user.displayName);
-      }
     });
+    return unsubscribe;
   }, []);
 
   const value = {
     currentUser,
     login,
-    error,
     signUp,
+    error,
     setError,
-    setSuccess,
-    setFollowUser,
-    followUser,
     success,
+    setSuccess,
     imageUrl,
     setImageUrl,
+    setFollowUser,
+    followUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

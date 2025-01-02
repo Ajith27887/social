@@ -37,41 +37,32 @@ function Photos() {
 
   console.log(data, "dash");
   return (
-    <div>
-      <ul className="p-3">
-        {data.map((user) => (
-          <li
-            style={{ listStyleType: "none" }}
-            className="mt-3 d-flex justify-content-center align-items-center"
-            key={user.id}
-          >
-            <Card
-              style={{ width: "50rem" }}
-              className="news-cadrs d-flex p-2 justify-content-center align-items-center"
-            >
-              <Card.Body>
-                <div className="d-flex justify-content-between ">
-                  <div>
-                    <Card.Title>{user.username}</Card.Title>
-                    <Card.Text>{user.address.city}</Card.Text>
-                  </div>
-                  <Card.Text>{user.email}</Card.Text>
+    <Container className="news-body">
+      <div className="mt-5">
+        <ul className="p-3 space-y-4">
+          {data.map((user) => (
+            <li key={user.id} className="bg-white rounded-lg shadow-lg p-6">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h2 className="text-xl font-semibold">{user.username}</h2>
+                  <p className="text-gray-600">{user.address.city}</p>
                 </div>
-                <div className="d-flex flex-column justify-content-center align-items-center text-center">
-                  {posts
-                    .filter((post) => post.userId === user.id)
-                    .map((post) => (
-                      <Card.Text className="w-75" key={post.id}>
-                        {post.body}
-                      </Card.Text>
-                    ))}
-                </div>
-              </Card.Body>
-            </Card>
-          </li>
-        ))}
-      </ul>
-    </div>
+                <p className="text-gray-600">{user.email}</p>
+              </div>
+              <div className="space-y-2">
+                {posts
+                  .filter((post) => post.userId === user.id)
+                  .map((post) => (
+                    <p className="text-gray-700" key={post.id}>
+                      {post.body}
+                    </p>
+                  ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Container>
   );
 }
 
@@ -79,7 +70,6 @@ function DashBoard() {
   return (
     <ApolloProvider client={client}>
       <Container className="news-body">
-        <ImageUploader />
         <Photos />
       </Container>
     </ApolloProvider>

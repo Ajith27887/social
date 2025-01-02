@@ -3,7 +3,7 @@ import { supabase } from "../Supabase/Supabase";
 async function FetchAllImages(userId) {
   const { data: files, error } = await supabase
     .from("images")
-    .select("public_url")
+    .select("public_url, created_at")
     .eq("user_id", userId);
 
   console.log(JSON.stringify(files, null, 2, "files"));
@@ -24,7 +24,7 @@ async function FetchAllImages(userId) {
   const imageUrls = files.map((file) => file.public_url);
 
   console.log("Image URLs:", files);
-  return imageUrls;
+  return files;
 }
 
 export default FetchAllImages;

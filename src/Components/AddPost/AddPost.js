@@ -1,65 +1,53 @@
 import React from "react";
-import ImageUploader from "../ImageUploader/ImageUploader";
 import { useAuth } from "../../Context/AuthContext";
+import ImageUploader from "../ImageUploader/ImageUploader";
 import { Badge } from "react-bootstrap";
 
-function AddPost() {
+const AddPost = () => {
   const { imageUrl, currentUser } = useAuth();
+  console.log(imageUrl, "imageurl");
 
   return (
-    <div className="container mx-auto ">
-      {" "}
+    <div className="container mx-auto p-5">
       <ImageUploader />
-      {imageUrl.length > 0 && (
-        <div className="flex flex-col justify-center items-center">
-          {imageUrl.map((url, index) => (
-            <div key={index} className="relative max-w-sm ">
-              <img
-                className="w-full shadow-lg object-cover rounded"
+      {imageUrl && imageUrl.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+          {imageUrl &&
+            imageUrl.map((file, index) => (
+              <div
                 key={index}
-                src={url}
-                alt={`Uploaded ${index}`}
-                style={{ width: "300px", marginTop: "10px", height: "300px" }}
-              />
-              <div className=" absolute top-0 left-0 m-2">
-                <Badge>
-                  {(currentUser && currentUser.user) || currentUser.displayName}
-                </Badge>
+                className="bg-white rounded-lg shadow-lg overflow-hidden"
+              >
+                <img
+                  className="w-full h-64 object-cover"
+                  src={file.public_url}
+                  alt={`Uploaded ${index}`}
+                />
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <Badge>{currentUser.displayName}</Badge>
+                  </div>
+                  <p className="text-gray-500 text-sm">
+                    Uploaded at:{" "}
+                    {file.created_at
+                      ? new Date(file.created_at).toLocaleString()
+                      : "N/A"}
+                  </p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">
+                      Like
+                    </button>
+                    <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300">
+                      Comment
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-            // <div className="max-w-sm w-full rounded overflow-hidden ">
-            //   <img
-            //     className="w-full shadow-lg object-cover rounded"
-            //     key={index}
-            //     src={url}
-            //     alt={`Uploaded ${index}`}
-            //     style={{ width: "300px", marginTop: "10px", height: "300px" }}
-            //   />
-            //   <div className="px-6 py-4">
-            //     <div className="font-bold text-xl mb-2">The Coldest Sunset</div>
-            //     <p className="text-gray-700 text-base">
-            //       Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            //       Voluptatibus quia, nulla! Maiores et perferendis eaque,
-            //       exercitationem praesentium nihil.
-            //     </p>
-            //   </div>
-            //   {/* <div class="px-6 pt-4 pb-2">
-            //     <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            //       #photography
-            //     </span>
-            //     <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            //       #travel
-            //     </span>
-            //     <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            //       #winter
-            //     </span>
-            //   </div> */}
-            // </div>
-          ))}
+            ))}
         </div>
       )}
     </div>
   );
-}
+};
 
 export default AddPost;
