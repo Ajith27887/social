@@ -7,8 +7,7 @@ import { useAuth } from "../../Context/AuthContext";
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState([]);
-  const { currentUser } = useAuth();
+  const { currentUser, setImageUrl } = useAuth();
   const userId = currentUser ? currentUser.uid : "";
   const userEmail = currentUser ? currentUser.email : "";
   console.log("uid", userId);
@@ -60,20 +59,6 @@ const ImageUploader = () => {
           </button>
         )}
       </div>
-
-      {imageUrl.length > 0 && (
-        <div>
-          <p>Uploaded Images:</p>
-          {imageUrl.map((url, index) => (
-            <img
-              key={index}
-              src={url}
-              alt={`Uploaded ${index}`}
-              style={{ width: "300px", marginTop: "10px" }}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 };

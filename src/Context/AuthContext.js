@@ -19,6 +19,7 @@ function AuthProvider({ children }) {
   // fetchAllUsers();
   const [currentUser, setCurrentUser] = useState(),
     [error, setError] = useState(""),
+    [imageUrl, setImageUrl] = useState([]),
     [success, setSuccess] = useState("");
   const [followUser, setFollowUser] = useState("");
 
@@ -100,6 +101,8 @@ function AuthProvider({ children }) {
     setFollowUser,
     followUser,
     success,
+    imageUrl,
+    setImageUrl,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

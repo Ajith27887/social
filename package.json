@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.12.4",
     "@supabase/supabase-js": "^2.47.10",
     "apollo-server": "^3.13.0",
     "axios": "^1.7.9",

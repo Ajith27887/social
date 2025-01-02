@@ -53,7 +53,10 @@ function NavBar() {
                 Suggestion
               </Nav.Link>
               <Nav.Link onClick={() => handleNavigation("/post")}>
-                Post
+                Friends Post
+              </Nav.Link>
+              <Nav.Link onClick={() => handleNavigation("/Add-post")}>
+                Add Post
               </Nav.Link>
             </Nav>
             <Nav>

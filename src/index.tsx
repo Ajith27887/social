@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import "bootstrap/dist/css/bootstrap.css";
+// import { AuthContext } from "../src/Context/AuthContext.js";
 
 // import reportWebVitals from './reportWebVitals';
 
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    {/* <AuthContext> */}
     <App />
+    {/* </AuthContext> */}
   </React.StrictMode>
 );
 

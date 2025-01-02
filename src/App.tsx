@@ -9,6 +9,7 @@ import PostPage from "./Components/Post/Post";
 import { useLocation } from "react-router-dom";
 import NavBar from "./Components/Navbar/Navbar";
 import Suggestion from "./Components/Suggestion/Suggestion";
+import AddPost from "./Components/AddPost/AddPost";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function AppContent() {
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Suggestion" element={<Suggestion />} />
+        <Route path="/Add-post" element={<AddPost />} />
       </Routes>
     </div>
   );
