@@ -30,7 +30,7 @@ function AppContent() {
         <NavBar />
       )}
       <Routes>
-        <Route path="/" element={<DashBoard />} />
+        <Route path="/Add-post" element={<AddPost />} />
         <Route path="/post" element={<PostPage />}></Route>
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Login" element={<Login />} />
