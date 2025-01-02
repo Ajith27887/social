@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import uploadImage from "../ImageUploader/uploadImage";
 import "../ImageUploader/ImageUpload.scss";
 import { CiImageOn } from "react-icons/ci";
-import FetchAllImages from "./FetchAllImages";
-import { useAuth } from "../../Context/AuthContext";
+import FetchAllImages from "./FetchAllImages.tsx";
+import { useAuth } from "../../Context/AuthContext.tsx";
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);

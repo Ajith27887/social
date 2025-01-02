@@ -1,22 +1,23 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
-export default function Login() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const { login, currentUser, error, setError, setSuccess, success } =
-    useAuth();
-  let navigate = useNavigate();
+const Login: React.FC = () => {
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const { login, currentUser, error, setError } = useAuth();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       setError("");
-      await login(emailRef.current.value, passwordRef.current.value);
+      if (emailRef.current && passwordRef.current) {
+        await login(emailRef.current.value, passwordRef.current.value);
+      }
     } catch (error) {
       setError("Account doesn't exist");
     }
@@ -24,7 +25,7 @@ export default function Login() {
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/");
+      navigate("/Add-post");
       console.log(currentUser, "crr");
     }
   }, [currentUser, navigate]);
@@ -83,4 +84,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

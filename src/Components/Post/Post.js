@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext.tsx";
 import { supabase } from "../Supabase/Supabase";
 
 const Post = () => {

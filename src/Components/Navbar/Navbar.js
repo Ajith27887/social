@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate, Outlet } from "react-router-dom";
 import { VscAccount } from "react-icons/vsc";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext.tsx";
 import "./Navbar.scss";
 
 function NavBar() {
@@ -36,7 +36,7 @@ function NavBar() {
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => handleNavigation("/")}
+              onClick={() => handleNavigation("/Add-post")}
               className="text-white font-bold text-xl"
             >
               MyApp

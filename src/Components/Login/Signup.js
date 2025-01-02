@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext.tsx";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Signup() {

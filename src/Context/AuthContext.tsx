@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import {
@@ -7,22 +13,49 @@ import {
   updateProfile,
   onAuthStateChanged,
   signOut,
+  User,
 } from "firebase/auth";
 
-const AuthContext = createContext();
-
-export function useAuth() {
-  return useContext(AuthContext);
+interface AuthContextType {
+  currentUser: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    displayName: string
+  ) => Promise<User | null>;
+  error: string;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+  success: string;
+  setSuccess: React.Dispatch<React.SetStateAction<string>>;
+  imageUrl: string[];
+  setImageUrl: React.Dispatch<React.SetStateAction<string[]>>;
+  followUser: string[];
+  setFollowUser: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+function AuthProvider({ children }: AuthProviderProps) {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [imageUrl, setImageUrl] = useState([]);
-  const [followUser, setFollowUser] = useState([]);
+  const [imageUrl, setImageUrl] = useState<string[]>([]);
+  const [followUser, setFollowUser] = useState<string[]>([]);
 
-  async function signUp(email, password, displayName) {
+  async function signUp(email: string, password: string, displayName: string) {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -44,7 +77,7 @@ function AuthProvider({ children }) {
     }
   }
 
-  async function login(email, password) {
+  async function login(email: string, password: string) {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,

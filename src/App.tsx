@@ -1,15 +1,15 @@
 import React from "react";
 import "./App.css";
 import Signup from "./Components/Login/Signup";
-import AuthProvider from "./Context/AuthContext";
+import AuthProvider from "./Context/AuthContext.tsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import DashBoard from "./Components/DashBoard/DashBoard";
-import Login from "./Components/Login/Login";
+import Login from "./Components/Login/Login.tsx";
 import PostPage from "./Components/Post/Post";
 import { useLocation } from "react-router-dom";
 import NavBar from "./Components/Navbar/Navbar";
 import Suggestion from "./Components/Suggestion/Suggestion";
-import AddPost from "./Components/AddPost/AddPost";
+import AddPost from "./Components/AddPost/AddPost.tsx";
 
 function App() {
   return (

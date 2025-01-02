@@ -3,7 +3,7 @@ import { fetchAllUsers } from "../../firebase";
 import { SlUserFollow } from "react-icons/sl";
 import { Badge, Button, Container } from "react-bootstrap";
 import "../Suggestion/Suggestion.scss";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext.tsx";
 import { RiUserUnfollowFill } from "react-icons/ri";
 
 function Suggestion() {
