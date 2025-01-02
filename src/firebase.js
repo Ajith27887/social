@@ -28,7 +28,7 @@ const provider = new GoogleAuthProvider();
 export const fetchAllUsers = async () => {
   try {
     // Reference the 'users' collection
-    const usersCollection = collection(db, "customersData");
+    const usersCollection = collection(db, "users");
 
     // Fetch all documents in the collection
     const querySnapshot = await getDocs(usersCollection);
