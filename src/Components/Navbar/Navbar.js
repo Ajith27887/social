@@ -61,7 +61,7 @@ function NavBar() {
               Friends Post
             </button>
             <button
-              onClick={() => handleNavigation("/")}
+              onClick={() => handleNavigation("/Dashboard")}
               className="text-white hover:text-gray-300"
             >
               News Feeds

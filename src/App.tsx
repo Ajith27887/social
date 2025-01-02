@@ -8,13 +8,13 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-// import DashBoard from "./Components/DashBoard/DashBoard";
 import Login from "./Components/Login/Login.tsx";
 import PostPage from "./Components/Post/Post";
 import { useLocation } from "react-router-dom";
 import NavBar from "./Components/Navbar/Navbar";
 import Suggestion from "./Components/Suggestion/Suggestion";
 import AddPost from "./Components/AddPost/AddPost.tsx";
+import DashBoard from "./Components/DashBoard/DashBoard.js";
 
 function App() {
   return (
@@ -41,6 +41,7 @@ function AppContent() {
         <Route path="/Login" element={<Login />} />
         <Route path="/Suggestion" element={<Suggestion />} />
         <Route path="/Add-post" element={<AddPost />} />
+        <Route path="/Dashboard" element={<DashBoard />} />
       </Routes>
     </div>
   );
