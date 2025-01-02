@@ -2,8 +2,13 @@ import React from "react";
 import "./App.css";
 import Signup from "./Components/Login/Signup";
 import AuthProvider from "./Context/AuthContext.tsx";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import DashBoard from "./Components/DashBoard/DashBoard";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+// import DashBoard from "./Components/DashBoard/DashBoard";
 import Login from "./Components/Login/Login.tsx";
 import PostPage from "./Components/Post/Post";
 import { useLocation } from "react-router-dom";
@@ -30,7 +35,7 @@ function AppContent() {
         <NavBar />
       )}
       <Routes>
-        <Route path="/Add-post" element={<AddPost />} />
+        <Route path="/" element={<Navigate to="/Add-post" />} />
         <Route path="/post" element={<PostPage />}></Route>
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Login" element={<Login />} />
